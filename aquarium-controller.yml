@@ -1,0 +1,115 @@
+esphome:
+  name: jixo-aquarium-controller
+  platform: esp8266
+  board: esp01_1m
+  on_boot:
+    priority: -10
+    then:
+      - switch.turn_off: espled1
+
+
+dallas:
+  - pin: GPIO14
+    update_interval: 120sec
+  
+
+sensor:
+  - platform: dallas
+    address: 0x2301203b5a209128
+    name: "aquarium-temperature"
+    #index: 0
+    
+  
+    filters:
+      - filter_out: nan
+
+binary_sensor:
+  - platform: gpio
+    id: water_low
+    name: aquarium filter water low
+    pin:
+      number: GPIO12
+      mode: INPUT_PULLUP
+      inverted: true
+
+  - platform: gpio
+    id: water_high
+    name: aquarium filter water high
+    pin:
+      number: GPIO13
+      mode: INPUT_PULLUP
+      inverted: true
+
+output:
+  - platform: gpio
+    pin: GPIO5
+    id: sw1
+
+  - platform: gpio
+    pin: GPIO4
+    id: sw2
+
+  - platform: gpio
+    pin: GPIO2
+    id: espled
+    inverted: true
+
+
+
+switch:
+  - platform: output
+    name: "Fan_Shuffle"
+    output: sw1
+    id: sww1
+    restore_mode: restore_default_off
+
+  - platform: output
+    name: "Fan_Power"
+    icon: "mdi:fan"
+    output: sw2
+    id: sww2
+    restore_mode: restore_default_off
+
+  - platform: output
+    name: "Esp_Led"
+    output: espled
+    id: espled1
+    restore_mode: restore_default_off
+
+interval:
+  - interval: 7min
+    then:
+      - if:
+          condition:
+            - switch.is_on: sww2
+          then:
+            - switch.toggle: sww1
+
+
+#status_led:
+  #pin: GPIO2
+
+button:
+  - platform: restart
+    name: "device-restart"
+
+# Enable logging
+logger:
+
+# Enable jixo API
+api:
+
+ota:
+
+wifi:
+  ssid: SmarTiFi
+  password: E1F01C3AEE
+
+  ap:
+    ssid: aquarium-monitor
+    password: "Jixo@2020"
+
+captive_portal:
+
+web_server:
+  port: 80
