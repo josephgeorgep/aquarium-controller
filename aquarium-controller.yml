@@ -15,7 +15,7 @@ dallas:
 
 sensor:
   - platform: dallas
-    address: 0x2301203b5a209128
+    address: 0x2301203b5a209128 //Address of your temperature sensor
     name: "aquarium-temperature"
     #index: 0
     
@@ -102,12 +102,12 @@ api:
 ota:
 
 wifi:
-  ssid: SmarTiFi
-  password: E1F01C3AEE
+  ssid: 'YOUR SSID
+  password: 'YOUR PASSWORD'
 
   ap:
     ssid: aquarium-monitor
-    password: "Jixo@2020"
+    password: "1122334455"
 
 captive_portal:
 
